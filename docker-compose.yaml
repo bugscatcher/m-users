@@ -1,0 +1,11 @@
+version: '2.2'
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "1521:1521"
+      - "81:81"
+    volumes:
+      - ~/h2-volume:/opt/h2-data
