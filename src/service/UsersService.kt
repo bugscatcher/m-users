@@ -6,6 +6,7 @@ import com.github.bugscatcher.model.User
 import com.github.bugscatcher.model.Users
 import com.github.bugscatcher.service.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import java.util.*
@@ -44,4 +45,12 @@ class UsersService {
             id = row[Users.id],
             name = row[Users.name]
         )
+
+    suspend fun deleteUser(fromString: UUID): Boolean {
+        return dbQuery {
+            Users.deleteWhere { Users.id eq fromString } > 0
+        }.also {
+            if (it) onChange(type = ChangeType.DELETE, id = fromString)
+        }
+    }
 }
